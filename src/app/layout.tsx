@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
 import './globals.css'
+import AuthProvider from '@/components/AuthProvider'
+import { auth } from '@/services/auth/auth'
 
 
 
@@ -12,17 +13,21 @@ export const metadata: Metadata = {
 
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const session = await auth()
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          {children}
-          <Toaster position="top-center" richColors />
+          <AuthProvider session={session}>
+
+            {children}
+            <Toaster position="top-center" richColors />
+          </AuthProvider>
         </ThemeProvider>
 
       </body>

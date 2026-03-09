@@ -6,6 +6,14 @@ import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { FileText, Trash2, Share2, Eye, Upload, Search } from 'lucide-react'
 import Link from 'next/link'
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import UploadPDF from "@/components/upload/UploadPDF"
 
 export default function DocumentsPage() {
     const [searchQuery, setSearchQuery] = useState('')
@@ -67,10 +75,22 @@ export default function DocumentsPage() {
                     <h1 className="text-3xl font-bold text-foreground">Documents</h1>
                     <p className="text-muted-foreground mt-2">Manage your uploaded PDF documents</p>
                 </div>
-                <Button className="gap-2">
-                    <Upload size={18} />
-                    Upload PDF
-                </Button>
+                <Dialog>
+                    <DialogTrigger >
+                        <Button className="gap-2">
+                            <Upload size={18} />
+                            Upload PDF
+                        </Button>
+                    </DialogTrigger>
+
+                    <DialogContent className="sm:max-w-lg">
+                        <DialogHeader>
+                            <DialogTitle>Upload PDF</DialogTitle>
+                        </DialogHeader>
+
+                        <UploadPDF />
+                    </DialogContent>
+                </Dialog>
             </div>
 
             {/* Search Bar */}
