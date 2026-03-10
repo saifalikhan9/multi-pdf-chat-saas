@@ -163,6 +163,7 @@ exports.Prisma.ChatScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   question: 'question',
+  docId: 'docId',
   answer: 'answer',
   createdAt: 'createdAt'
 };

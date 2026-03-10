@@ -1,10 +1,6 @@
-import { index } from "@/lib/pinecone";
+import { pineconeIndex } from "@/lib/pinecone";
 
 export async function deleteDocumentVectors(docId: string, userId: string) {
-  await index.deleteMany({
-    filter: {
-      docId,
-      userId,
-    },
-  });
+  const ns = pineconeIndex.namespace(userId);
+  await ns.deleteMany({ docId });
 }

@@ -6,8 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output = "./generate"
-
+  output   = "./generate"
 }
 
 datasource db {
@@ -24,10 +23,10 @@ model User {
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts      Account[]
-  sessions      Session[]
-  chats         Chat[]
-  documents     Document[]
+  accounts  Account[]
+  sessions  Session[]
+  chats     Chat[]
+  documents Document[]
 }
 
 model Account {
@@ -68,15 +67,18 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
 model Chat {
   id        String   @id @default(cuid())
   userId    String
   question  String
+  docId     String
   answer    String
   createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document  Document @relation(fields: [docId], references: [id], onDelete: Cascade)
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@index([docId])
 }
 
 model Document {
@@ -86,7 +88,8 @@ model Document {
   chunkCount Int
   createdAt  DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chats Chat[]
 
   @@index([userId])
 }

@@ -1370,6 +1370,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type DocumentCountOutputType
+   */
+
+  export type DocumentCountOutputType = {
+    chats: number
+  }
+
+  export type DocumentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chats?: boolean | DocumentCountOutputTypeCountChatsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * DocumentCountOutputType without action
+   */
+  export type DocumentCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the DocumentCountOutputType
+     */
+    select?: DocumentCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * DocumentCountOutputType without action
+   */
+  export type DocumentCountOutputTypeCountChatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChatWhereInput
+  }
+
+
+  /**
    * Models
    */
 
@@ -5764,6 +5795,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     question: string | null
+    docId: string | null
     answer: string | null
     createdAt: Date | null
   }
@@ -5772,6 +5804,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     question: string | null
+    docId: string | null
     answer: string | null
     createdAt: Date | null
   }
@@ -5780,6 +5813,7 @@ export namespace Prisma {
     id: number
     userId: number
     question: number
+    docId: number
     answer: number
     createdAt: number
     _all: number
@@ -5790,6 +5824,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     question?: true
+    docId?: true
     answer?: true
     createdAt?: true
   }
@@ -5798,6 +5833,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     question?: true
+    docId?: true
     answer?: true
     createdAt?: true
   }
@@ -5806,6 +5842,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     question?: true
+    docId?: true
     answer?: true
     createdAt?: true
     _all?: true
@@ -5887,6 +5924,7 @@ export namespace Prisma {
     id: string
     userId: string
     question: string
+    docId: string
     answer: string
     createdAt: Date
     _count: ChatCountAggregateOutputType | null
@@ -5912,57 +5950,69 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     question?: boolean
+    docId?: boolean
     answer?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chat"]>
 
   export type ChatSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     question?: boolean
+    docId?: boolean
     answer?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chat"]>
 
   export type ChatSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     question?: boolean
+    docId?: boolean
     answer?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chat"]>
 
   export type ChatSelectScalar = {
     id?: boolean
     userId?: boolean
     question?: boolean
+    docId?: boolean
     answer?: boolean
     createdAt?: boolean
   }
 
-  export type ChatOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "question" | "answer" | "createdAt", ExtArgs["result"]["chat"]>
+  export type ChatOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "question" | "docId" | "answer" | "createdAt", ExtArgs["result"]["chat"]>
   export type ChatInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
   }
   export type ChatIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
   }
   export type ChatIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    document?: boolean | DocumentDefaultArgs<ExtArgs>
   }
 
   export type $ChatPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Chat"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      document: Prisma.$DocumentPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
       question: string
+      docId: string
       answer: string
       createdAt: Date
     }, ExtArgs["result"]["chat"]>
@@ -6360,6 +6410,7 @@ export namespace Prisma {
   export interface Prisma__ChatClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    document<T extends DocumentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DocumentDefaultArgs<ExtArgs>>): Prisma__DocumentClient<$Result.GetResult<Prisma.$DocumentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6392,6 +6443,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Chat", 'String'>
     readonly userId: FieldRef<"Chat", 'String'>
     readonly question: FieldRef<"Chat", 'String'>
+    readonly docId: FieldRef<"Chat", 'String'>
     readonly answer: FieldRef<"Chat", 'String'>
     readonly createdAt: FieldRef<"Chat", 'DateTime'>
   }
@@ -7007,6 +7059,8 @@ export namespace Prisma {
     chunkCount?: boolean
     createdAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    chats?: boolean | Document$chatsArgs<ExtArgs>
+    _count?: boolean | DocumentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["document"]>
 
   export type DocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -7038,6 +7092,8 @@ export namespace Prisma {
   export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "userId" | "chunkCount" | "createdAt", ExtArgs["result"]["document"]>
   export type DocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    chats?: boolean | Document$chatsArgs<ExtArgs>
+    _count?: boolean | DocumentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -7050,6 +7106,7 @@ export namespace Prisma {
     name: "Document"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      chats: Prisma.$ChatPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7452,6 +7509,7 @@ export namespace Prisma {
   export interface Prisma__DocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chats<T extends Document$chatsArgs<ExtArgs> = {}>(args?: Subset<T, Document$chatsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7882,6 +7940,30 @@ export namespace Prisma {
   }
 
   /**
+   * Document.chats
+   */
+  export type Document$chatsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Chat
+     */
+    select?: ChatSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Chat
+     */
+    omit?: ChatOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChatInclude<ExtArgs> | null
+    where?: ChatWhereInput
+    orderBy?: ChatOrderByWithRelationInput | ChatOrderByWithRelationInput[]
+    cursor?: ChatWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ChatScalarFieldEnum | ChatScalarFieldEnum[]
+  }
+
+  /**
    * Document without action
    */
   export type DocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7968,6 +8050,7 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     question: 'question',
+    docId: 'docId',
     answer: 'answer',
     createdAt: 'createdAt'
   };
@@ -8341,18 +8424,22 @@ export namespace Prisma {
     id?: StringFilter<"Chat"> | string
     userId?: StringFilter<"Chat"> | string
     question?: StringFilter<"Chat"> | string
+    docId?: StringFilter<"Chat"> | string
     answer?: StringFilter<"Chat"> | string
     createdAt?: DateTimeFilter<"Chat"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    document?: XOR<DocumentScalarRelationFilter, DocumentWhereInput>
   }
 
   export type ChatOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
     question?: SortOrder
+    docId?: SortOrder
     answer?: SortOrder
     createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
+    document?: DocumentOrderByWithRelationInput
   }
 
   export type ChatWhereUniqueInput = Prisma.AtLeast<{
@@ -8362,15 +8449,18 @@ export namespace Prisma {
     NOT?: ChatWhereInput | ChatWhereInput[]
     userId?: StringFilter<"Chat"> | string
     question?: StringFilter<"Chat"> | string
+    docId?: StringFilter<"Chat"> | string
     answer?: StringFilter<"Chat"> | string
     createdAt?: DateTimeFilter<"Chat"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    document?: XOR<DocumentScalarRelationFilter, DocumentWhereInput>
   }, "id">
 
   export type ChatOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
     question?: SortOrder
+    docId?: SortOrder
     answer?: SortOrder
     createdAt?: SortOrder
     _count?: ChatCountOrderByAggregateInput
@@ -8385,6 +8475,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Chat"> | string
     userId?: StringWithAggregatesFilter<"Chat"> | string
     question?: StringWithAggregatesFilter<"Chat"> | string
+    docId?: StringWithAggregatesFilter<"Chat"> | string
     answer?: StringWithAggregatesFilter<"Chat"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Chat"> | Date | string
   }
@@ -8399,6 +8490,7 @@ export namespace Prisma {
     chunkCount?: IntFilter<"Document"> | number
     createdAt?: DateTimeFilter<"Document"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    chats?: ChatListRelationFilter
   }
 
   export type DocumentOrderByWithRelationInput = {
@@ -8408,6 +8500,7 @@ export namespace Prisma {
     chunkCount?: SortOrder
     createdAt?: SortOrder
     user?: UserOrderByWithRelationInput
+    chats?: ChatOrderByRelationAggregateInput
   }
 
   export type DocumentWhereUniqueInput = Prisma.AtLeast<{
@@ -8420,6 +8513,7 @@ export namespace Prisma {
     chunkCount?: IntFilter<"Document"> | number
     createdAt?: DateTimeFilter<"Document"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    chats?: ChatListRelationFilter
   }, "id">
 
   export type DocumentOrderByWithAggregationInput = {
@@ -8732,12 +8826,14 @@ export namespace Prisma {
     answer: string
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutChatsInput
+    document: DocumentCreateNestedOneWithoutChatsInput
   }
 
   export type ChatUncheckedCreateInput = {
     id?: string
     userId: string
     question: string
+    docId: string
     answer: string
     createdAt?: Date | string
   }
@@ -8748,12 +8844,14 @@ export namespace Prisma {
     answer?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutChatsNestedInput
+    document?: DocumentUpdateOneRequiredWithoutChatsNestedInput
   }
 
   export type ChatUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    docId?: StringFieldUpdateOperationsInput | string
     answer?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8762,6 +8860,7 @@ export namespace Prisma {
     id?: string
     userId: string
     question: string
+    docId: string
     answer: string
     createdAt?: Date | string
   }
@@ -8777,6 +8876,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    docId?: StringFieldUpdateOperationsInput | string
     answer?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8787,6 +8887,7 @@ export namespace Prisma {
     chunkCount: number
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutDocumentsInput
+    chats?: ChatCreateNestedManyWithoutDocumentInput
   }
 
   export type DocumentUncheckedCreateInput = {
@@ -8795,6 +8896,7 @@ export namespace Prisma {
     userId: string
     chunkCount: number
     createdAt?: Date | string
+    chats?: ChatUncheckedCreateNestedManyWithoutDocumentInput
   }
 
   export type DocumentUpdateInput = {
@@ -8803,6 +8905,7 @@ export namespace Prisma {
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDocumentsNestedInput
+    chats?: ChatUpdateManyWithoutDocumentNestedInput
   }
 
   export type DocumentUncheckedUpdateInput = {
@@ -8811,6 +8914,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chats?: ChatUncheckedUpdateManyWithoutDocumentNestedInput
   }
 
   export type DocumentCreateManyInput = {
@@ -9161,10 +9265,16 @@ export namespace Prisma {
     expires?: SortOrder
   }
 
+  export type DocumentScalarRelationFilter = {
+    is?: DocumentWhereInput
+    isNot?: DocumentWhereInput
+  }
+
   export type ChatCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     question?: SortOrder
+    docId?: SortOrder
     answer?: SortOrder
     createdAt?: SortOrder
   }
@@ -9173,6 +9283,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     question?: SortOrder
+    docId?: SortOrder
     answer?: SortOrder
     createdAt?: SortOrder
   }
@@ -9181,6 +9292,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     question?: SortOrder
+    docId?: SortOrder
     answer?: SortOrder
     createdAt?: SortOrder
   }
@@ -9470,6 +9582,12 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type DocumentCreateNestedOneWithoutChatsInput = {
+    create?: XOR<DocumentCreateWithoutChatsInput, DocumentUncheckedCreateWithoutChatsInput>
+    connectOrCreate?: DocumentCreateOrConnectWithoutChatsInput
+    connect?: DocumentWhereUniqueInput
+  }
+
   export type UserUpdateOneRequiredWithoutChatsNestedInput = {
     create?: XOR<UserCreateWithoutChatsInput, UserUncheckedCreateWithoutChatsInput>
     connectOrCreate?: UserCreateOrConnectWithoutChatsInput
@@ -9478,10 +9596,32 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutChatsInput, UserUpdateWithoutChatsInput>, UserUncheckedUpdateWithoutChatsInput>
   }
 
+  export type DocumentUpdateOneRequiredWithoutChatsNestedInput = {
+    create?: XOR<DocumentCreateWithoutChatsInput, DocumentUncheckedCreateWithoutChatsInput>
+    connectOrCreate?: DocumentCreateOrConnectWithoutChatsInput
+    upsert?: DocumentUpsertWithoutChatsInput
+    connect?: DocumentWhereUniqueInput
+    update?: XOR<XOR<DocumentUpdateToOneWithWhereWithoutChatsInput, DocumentUpdateWithoutChatsInput>, DocumentUncheckedUpdateWithoutChatsInput>
+  }
+
   export type UserCreateNestedOneWithoutDocumentsInput = {
     create?: XOR<UserCreateWithoutDocumentsInput, UserUncheckedCreateWithoutDocumentsInput>
     connectOrCreate?: UserCreateOrConnectWithoutDocumentsInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type ChatCreateNestedManyWithoutDocumentInput = {
+    create?: XOR<ChatCreateWithoutDocumentInput, ChatUncheckedCreateWithoutDocumentInput> | ChatCreateWithoutDocumentInput[] | ChatUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutDocumentInput | ChatCreateOrConnectWithoutDocumentInput[]
+    createMany?: ChatCreateManyDocumentInputEnvelope
+    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+  }
+
+  export type ChatUncheckedCreateNestedManyWithoutDocumentInput = {
+    create?: XOR<ChatCreateWithoutDocumentInput, ChatUncheckedCreateWithoutDocumentInput> | ChatCreateWithoutDocumentInput[] | ChatUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutDocumentInput | ChatCreateOrConnectWithoutDocumentInput[]
+    createMany?: ChatCreateManyDocumentInputEnvelope
+    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -9498,6 +9638,34 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutDocumentsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutDocumentsInput, UserUpdateWithoutDocumentsInput>, UserUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type ChatUpdateManyWithoutDocumentNestedInput = {
+    create?: XOR<ChatCreateWithoutDocumentInput, ChatUncheckedCreateWithoutDocumentInput> | ChatCreateWithoutDocumentInput[] | ChatUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutDocumentInput | ChatCreateOrConnectWithoutDocumentInput[]
+    upsert?: ChatUpsertWithWhereUniqueWithoutDocumentInput | ChatUpsertWithWhereUniqueWithoutDocumentInput[]
+    createMany?: ChatCreateManyDocumentInputEnvelope
+    set?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    disconnect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    delete?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    update?: ChatUpdateWithWhereUniqueWithoutDocumentInput | ChatUpdateWithWhereUniqueWithoutDocumentInput[]
+    updateMany?: ChatUpdateManyWithWhereWithoutDocumentInput | ChatUpdateManyWithWhereWithoutDocumentInput[]
+    deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
+  }
+
+  export type ChatUncheckedUpdateManyWithoutDocumentNestedInput = {
+    create?: XOR<ChatCreateWithoutDocumentInput, ChatUncheckedCreateWithoutDocumentInput> | ChatCreateWithoutDocumentInput[] | ChatUncheckedCreateWithoutDocumentInput[]
+    connectOrCreate?: ChatCreateOrConnectWithoutDocumentInput | ChatCreateOrConnectWithoutDocumentInput[]
+    upsert?: ChatUpsertWithWhereUniqueWithoutDocumentInput | ChatUpsertWithWhereUniqueWithoutDocumentInput[]
+    createMany?: ChatCreateManyDocumentInputEnvelope
+    set?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    disconnect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    delete?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
+    update?: ChatUpdateWithWhereUniqueWithoutDocumentInput | ChatUpdateWithWhereUniqueWithoutDocumentInput[]
+    updateMany?: ChatUpdateManyWithWhereWithoutDocumentInput | ChatUpdateManyWithWhereWithoutDocumentInput[]
+    deleteMany?: ChatScalarWhereInput | ChatScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -9753,11 +9921,13 @@ export namespace Prisma {
     question: string
     answer: string
     createdAt?: Date | string
+    document: DocumentCreateNestedOneWithoutChatsInput
   }
 
   export type ChatUncheckedCreateWithoutUserInput = {
     id?: string
     question: string
+    docId: string
     answer: string
     createdAt?: Date | string
   }
@@ -9777,6 +9947,7 @@ export namespace Prisma {
     name: string
     chunkCount: number
     createdAt?: Date | string
+    chats?: ChatCreateNestedManyWithoutDocumentInput
   }
 
   export type DocumentUncheckedCreateWithoutUserInput = {
@@ -9784,6 +9955,7 @@ export namespace Prisma {
     name: string
     chunkCount: number
     createdAt?: Date | string
+    chats?: ChatUncheckedCreateNestedManyWithoutDocumentInput
   }
 
   export type DocumentCreateOrConnectWithoutUserInput = {
@@ -9879,6 +10051,7 @@ export namespace Prisma {
     id?: StringFilter<"Chat"> | string
     userId?: StringFilter<"Chat"> | string
     question?: StringFilter<"Chat"> | string
+    docId?: StringFilter<"Chat"> | string
     answer?: StringFilter<"Chat"> | string
     createdAt?: DateTimeFilter<"Chat"> | Date | string
   }
@@ -10077,6 +10250,27 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutChatsInput, UserUncheckedCreateWithoutChatsInput>
   }
 
+  export type DocumentCreateWithoutChatsInput = {
+    id?: string
+    name: string
+    chunkCount: number
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type DocumentUncheckedCreateWithoutChatsInput = {
+    id?: string
+    name: string
+    userId: string
+    chunkCount: number
+    createdAt?: Date | string
+  }
+
+  export type DocumentCreateOrConnectWithoutChatsInput = {
+    where: DocumentWhereUniqueInput
+    create: XOR<DocumentCreateWithoutChatsInput, DocumentUncheckedCreateWithoutChatsInput>
+  }
+
   export type UserUpsertWithoutChatsInput = {
     update: XOR<UserUpdateWithoutChatsInput, UserUncheckedUpdateWithoutChatsInput>
     create: XOR<UserCreateWithoutChatsInput, UserUncheckedCreateWithoutChatsInput>
@@ -10114,6 +10308,33 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type DocumentUpsertWithoutChatsInput = {
+    update: XOR<DocumentUpdateWithoutChatsInput, DocumentUncheckedUpdateWithoutChatsInput>
+    create: XOR<DocumentCreateWithoutChatsInput, DocumentUncheckedCreateWithoutChatsInput>
+    where?: DocumentWhereInput
+  }
+
+  export type DocumentUpdateToOneWithWhereWithoutChatsInput = {
+    where?: DocumentWhereInput
+    data: XOR<DocumentUpdateWithoutChatsInput, DocumentUncheckedUpdateWithoutChatsInput>
+  }
+
+  export type DocumentUpdateWithoutChatsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    chunkCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type DocumentUncheckedUpdateWithoutChatsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    chunkCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateWithoutDocumentsInput = {
     id?: string
     name?: string | null
@@ -10143,6 +10364,32 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutDocumentsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutDocumentsInput, UserUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type ChatCreateWithoutDocumentInput = {
+    id?: string
+    question: string
+    answer: string
+    createdAt?: Date | string
+    user: UserCreateNestedOneWithoutChatsInput
+  }
+
+  export type ChatUncheckedCreateWithoutDocumentInput = {
+    id?: string
+    userId: string
+    question: string
+    answer: string
+    createdAt?: Date | string
+  }
+
+  export type ChatCreateOrConnectWithoutDocumentInput = {
+    where: ChatWhereUniqueInput
+    create: XOR<ChatCreateWithoutDocumentInput, ChatUncheckedCreateWithoutDocumentInput>
+  }
+
+  export type ChatCreateManyDocumentInputEnvelope = {
+    data: ChatCreateManyDocumentInput | ChatCreateManyDocumentInput[]
+    skipDuplicates?: boolean
   }
 
   export type UserUpsertWithoutDocumentsInput = {
@@ -10182,6 +10429,22 @@ export namespace Prisma {
     chats?: ChatUncheckedUpdateManyWithoutUserNestedInput
   }
 
+  export type ChatUpsertWithWhereUniqueWithoutDocumentInput = {
+    where: ChatWhereUniqueInput
+    update: XOR<ChatUpdateWithoutDocumentInput, ChatUncheckedUpdateWithoutDocumentInput>
+    create: XOR<ChatCreateWithoutDocumentInput, ChatUncheckedCreateWithoutDocumentInput>
+  }
+
+  export type ChatUpdateWithWhereUniqueWithoutDocumentInput = {
+    where: ChatWhereUniqueInput
+    data: XOR<ChatUpdateWithoutDocumentInput, ChatUncheckedUpdateWithoutDocumentInput>
+  }
+
+  export type ChatUpdateManyWithWhereWithoutDocumentInput = {
+    where: ChatScalarWhereInput
+    data: XOR<ChatUpdateManyMutationInput, ChatUncheckedUpdateManyWithoutDocumentInput>
+  }
+
   export type AccountCreateManyUserInput = {
     id?: string
     type: string
@@ -10205,6 +10468,7 @@ export namespace Prisma {
   export type ChatCreateManyUserInput = {
     id?: string
     question: string
+    docId: string
     answer: string
     createdAt?: Date | string
   }
@@ -10281,11 +10545,13 @@ export namespace Prisma {
     question?: StringFieldUpdateOperationsInput | string
     answer?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    document?: DocumentUpdateOneRequiredWithoutChatsNestedInput
   }
 
   export type ChatUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    docId?: StringFieldUpdateOperationsInput | string
     answer?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10293,6 +10559,7 @@ export namespace Prisma {
   export type ChatUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     question?: StringFieldUpdateOperationsInput | string
+    docId?: StringFieldUpdateOperationsInput | string
     answer?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -10302,6 +10569,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chats?: ChatUpdateManyWithoutDocumentNestedInput
   }
 
   export type DocumentUncheckedUpdateWithoutUserInput = {
@@ -10309,12 +10577,45 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chats?: ChatUncheckedUpdateManyWithoutDocumentNestedInput
   }
 
   export type DocumentUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     chunkCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChatCreateManyDocumentInput = {
+    id?: string
+    userId: string
+    question: string
+    answer: string
+    createdAt?: Date | string
+  }
+
+  export type ChatUpdateWithoutDocumentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutChatsNestedInput
+  }
+
+  export type ChatUncheckedUpdateWithoutDocumentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChatUncheckedUpdateManyWithoutDocumentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    question?: StringFieldUpdateOperationsInput | string
+    answer?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

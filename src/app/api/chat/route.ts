@@ -17,14 +17,14 @@ export async function POST(req: Request) {
     const userId = session.user.id;
 
     // 📥 Parse request
-    const { question } = await req.json();
+    const { question, docId } = await req.json();
 
     if (!question || typeof question !== "string") {
       return Response.json({ error: "Invalid question" }, { status: 400 });
     }
 
     // 🔎 Retrieve relevant chunks (LangChain Pinecone)
-    const docs = await retrieveChunks(question, userId);
+    const docs = await retrieveChunks(question, userId, docId);
 
     // 🧾 Build RAG context
     const context = buildContext(docs);
@@ -38,6 +38,7 @@ export async function POST(req: Request) {
     await prisma.chat.create({
       data: {
         userId,
+        docId,
         question,
         answer: answerString,
       },
