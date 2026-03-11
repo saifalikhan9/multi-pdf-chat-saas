@@ -1,13 +1,10 @@
 import { auth } from "@/services/auth/auth";
-import prisma from "@/lib/prisma";
-
 import { buildContext } from "@/services/rag/context";
 import { generateAnswer } from "@/services/rag/generate";
 import { retrieveChunks } from "@/services/rag/retrive";
 
 export async function POST(req: Request) {
   try {
-    // 🔐 Auth check
     const session = await auth();
 
     if (!session?.user?.id) {
@@ -16,43 +13,39 @@ export async function POST(req: Request) {
 
     const userId = session.user.id;
 
-    // 📥 Parse request
     const { question, docId } = await req.json();
 
     if (!question || typeof question !== "string") {
       return Response.json({ error: "Invalid question" }, { status: 400 });
     }
 
-    // 🔎 Retrieve relevant chunks (LangChain Pinecone)
     const docs = await retrieveChunks(question, userId, docId);
 
-    // 🧾 Build RAG context
     const context = buildContext(docs);
 
-    // 🤖 Generate grounded answer
-    const answer = await generateAnswer(question, context);
-    const answerString =
-      typeof answer === "string" ? answer : JSON.stringify(answer);
+    const stream = await generateAnswer(question, context);
 
-    // 💾 Save chat history
-    await prisma.chat.create({
-      data: {
-        userId,
-        docId,
-        question,
-        answer: answerString,
+    const encoder = new TextEncoder();
+
+    const readableStream = new ReadableStream({
+      async start(controller) {
+
+        for await (const chunk of stream) {
+          controller.enqueue(
+            encoder.encode(chunk)
+          );
+        }
+
+        controller.close();
       },
     });
 
-    // 📤 Response with citations
-    return Response.json({
-      answer,
-      citations: docs.map((d) => ({
-        doc: d.metadata.docName,
-        chunk: d.metadata.chunk,
-        docId: d.metadata.docId,
-      })),
+    return new Response(readableStream, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+      },
     });
+
   } catch (err) {
     console.error("Chat API error:", err);
     return Response.json({ error: "Chat failed" }, { status: 500 });

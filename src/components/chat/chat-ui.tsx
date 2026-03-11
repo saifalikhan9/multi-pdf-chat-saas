@@ -7,9 +7,6 @@ import { toast } from "sonner"
 import ChatHistory, { Message } from "./chat-history"
 
 
-
-
-
 export default function ChatUI({ docId, initMessage }: { docId: string, initMessage: Message[] }) {
   const [question, setQuestion] = useState("")
   const [messages, setMessages] = useState<Message[]>(initMessage || [])
@@ -27,6 +24,7 @@ export default function ChatUI({ docId, initMessage }: { docId: string, initMess
     }
 
     setMessages(prev => [...prev, userMessage])
+
     setQuestion("")
     setLoading(true)
 
@@ -42,35 +40,40 @@ export default function ChatUI({ docId, initMessage }: { docId: string, initMess
         })
       })
 
-      const data = await res.json()
-
       if (!res.ok) {
-        if (res.status === 401) {
-          throw new Error(data.error || "Unauthorized")
-        }
-
-        if (res.status === 400) {
-          throw new Error(data.error || "Invalid question")
-        }
-
-        throw new Error(data.error || "Chat failed")
+        throw new Error("Chat failed")
       }
 
-      let answerText = ""
-
-      if (typeof data.answer === "string") {
-        answerText = data.answer
-      } else {
-        answerText = JSON.stringify(data.answer, null, 2)
+      if (!res.body) {
+        throw new Error("No response stream")
       }
 
-      const assistantMessage: Message = {
+      const reader = res.body.getReader()
+      const decoder = new TextDecoder()
+
+      let assistantMessage: Message = {
         role: "assistant",
-        content: answerText,
-        citations: data.citations || []
+        content: ""
       }
 
+      // Add empty assistant message first
       setMessages(prev => [...prev, assistantMessage])
+
+      while (true) {
+        const { done, value } = await reader.read()
+
+        if (done) break
+
+        const chunk = decoder.decode(value)
+
+        assistantMessage.content += chunk
+
+        setMessages(prev => {
+          const newMessages = [...prev]
+          newMessages[newMessages.length - 1] = { ...assistantMessage }
+          return newMessages
+        })
+      }
 
     } catch (err: any) {
       toast.error(err.message)

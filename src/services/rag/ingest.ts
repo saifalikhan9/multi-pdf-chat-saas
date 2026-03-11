@@ -16,21 +16,32 @@ export async function ingestPDF(
 
   const chunks = chunkText(text);
 
-  const vectors = await embeddings.embedDocuments(chunks);
+  const BATCH_SIZE = 50;
 
-  const records = vectors.map((values, i) => ({
-    id: `${docId}-${i}`,
-    values,
-    metadata: {
-      text: chunks[i],
-      userId,
-      docName,
-      docId,
-      chunk: i,
-    },
-  }));
+  for (let i = 0; i < chunks.length; i += BATCH_SIZE) {
 
-  await pineconeIndex.namespace(userId).upsert({records});
+    const batchChunks = chunks.slice(i, i + BATCH_SIZE);
+
+    const vectors = await embeddings.embedDocuments(batchChunks);
+
+    const records = vectors.map((values, j) => ({
+      id: `${docId}-${i + j}`,
+      values,
+      metadata: {
+        text: batchChunks[j],
+        userId,
+        docName,
+        docId,
+        chunk: i + j,
+      },
+    }));
+
+    await pineconeIndex
+      .namespace(userId)
+      .upsert({ records });
+
+    console.log(`Embedded batch ${i / BATCH_SIZE + 1}`);
+  }
 
   return {
     chunks: chunks.length,
