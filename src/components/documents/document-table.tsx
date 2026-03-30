@@ -15,6 +15,7 @@ import {
 import UploadPDF from "@/components/upload/UploadPDF"
 import Link from "next/link"
 import { toast } from "sonner"
+import { UploadDropzone } from "@/lib/uploadthing"
 
 type Document = {
     id: string
@@ -30,6 +31,7 @@ export default function DocumentsTable({
 }) {
 
     const [searchQuery, setSearchQuery] = useState("")
+    const [isProcessing, setIsProcessing] = useState(false);
     const [docs, setDocs] = useState(documents)
     const [deleting, setDeleting] = useState<string | null>(null)
 
@@ -77,7 +79,7 @@ export default function DocumentsTable({
                         className="pl-10 bg-card border-border"
                     />
                 </div>
-                <Dialog>
+                {/* <Dialog>
                     <DialogTrigger >
                         <Button className="gap-2">
                             <Upload size={18} />
@@ -92,7 +94,47 @@ export default function DocumentsTable({
 
                         <UploadPDF />
                     </DialogContent>
-                </Dialog>
+                </Dialog> */}
+
+
+                <UploadDropzone
+                    // This must match the endpoint name you defined in core.ts
+                    endpoint="pdfUploader"
+
+                    onUploadBegin={() => {
+                        // Triggers the moment the file is dropped
+                        setIsProcessing(true);
+                    }}
+
+                    onClientUploadComplete={(res) => {
+                        // Runs when UploadThing finishes saving to the bucket
+                        setIsProcessing(false);
+
+                        // res is an array of uploaded files. We only allow 1 at a time.
+                        const uploadedFile = res?.[0];
+
+                        if (uploadedFile) {
+                            console.log("File available at:", uploadedFile.url);
+                            // TODO: Refresh your document list or redirect to the Chat Workspace
+                            alert("Upload Complete! We are processing your PDF.");
+                        }
+                    }}
+
+                    onUploadError={(error: Error) => {
+                        setIsProcessing(false);
+                        // Standard error handling (e.g., file too large, wrong type)
+                        alert(`ERROR! ${error.message}`);
+                    }}
+
+                    // Optional: Customize the styling using Tailwind
+                    appearance={{
+                        container: "border-2 border-dashed border-gray-300 bg-gray-50",
+                        button: "bg-blue-600 hover:bg-blue-700 text-white",
+                        label: "text-gray-600",
+                    }}
+                />
+
+
             </div>
 
             {/* Table */}
@@ -208,3 +250,8 @@ export default function DocumentsTable({
         </div>
     )
 }
+
+
+
+
+

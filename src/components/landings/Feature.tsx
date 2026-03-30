@@ -1,46 +1,62 @@
-import { MessageSquare, Upload, Zap } from 'lucide-react'
-import React from 'react'
+"use client"
+import { WobbleCard } from '../ui/wobble-card'
 
 export const Feature = () => {
   return (
-    <section className="max-w-7xl mx-auto px-4 py-20">
-    <h2 className="text-3xl font-bold text-foreground mb-12 text-center">
-      Powerful Features
-    </h2>
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {/* Feature 1 */}
-      <div className="bg-card rounded-lg p-8 border border-border">
-        <Upload className="w-12 h-12 text-accent mb-4" />
-        <h3 className="text-xl font-semibold text-foreground mb-3">
-          Easy Upload
-        </h3>
-        <p className="text-muted-foreground">
-          Upload multiple PDFs at once and start asking questions immediately. Support for documents up to 50MB.
-        </p>
+    <section className="max-w-7xl mx-auto px-20 ">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-7xl mx-auto w-full text-black">
+        <WobbleCard
+          containerClassName="col-span-1 lg:col-span-2 h-full bg-primary/50 min-h-[500px] lg:min-h-[300px]"
+          className=""
+        >
+          <div className="max-w-xs">
+            <h2 className="text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] ">
+            Chat with PDFs
+            </h2>
+            <p className="mt-4 text-left  text-base/6 text-neutral-200">
+            Ask complex questions to your documents and get context-aware
+            responses instantly using advanced neural retrieval.
+            </p>
+          </div>
+          <img
+            src="/linear.webp"
+            width={500}
+            height={500}
+            alt="linear demo image"
+            className="absolute -right-4 lg:-right-[40%] grayscale filter -bottom-10 object-contain rounded-2xl"
+          />
+        </WobbleCard>
+        <WobbleCard containerClassName="col-span-1 min-h-[300px] bg-secondary/50">
+          <h2 className="max-w-80  text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] ">
+          Smart Retrieval
+          </h2>
+          <p className="mt-4 max-w-104 text-left  text-base/6 text-neutral-200">
+          Pinpoint exact information within thousands of pages with 99.9%
+          semantic accuracy across various data structures.
+          </p>
+        </WobbleCard>
+        <WobbleCard containerClassName="col-span-1 lg:col-span-3 bg-accent/50 min-h-[500px] lg:min-h-[600px] xl:min-h-[300px]">
+          <div className="max-w-sm">
+            <h2 className="max-w-sm md:max-w-lg  text-left text-balance text-base md:text-xl lg:text-3xl font-semibold tracking-[-0.015em] ">
+            AI MCQ Generator
+            </h2>
+            <p className="mt-4 max-w-104 text-left  text-base/6 text-neutral-200">
+            Automatically generate comprehensive multiple-choice questions to test
+            your knowledge retention and understanding.
+            </p>
+          </div>
+          <img
+            src="/linear.webp"
+            width={500}
+            height={500}
+            alt="linear demo image"
+            className="absolute -right-10 md:-right-[40%] lg:-right-[20%] -bottom-10 object-contain rounded-2xl"
+          />
+        </WobbleCard>
+        
       </div>
-
-      {/* Feature 2 */}
-      <div className="bg-card rounded-lg p-8 border border-border">
-        <MessageSquare className="w-12 h-12 text-accent mb-4" />
-        <h3 className="text-xl font-semibold text-foreground mb-3">
-          Intelligent Chat
-        </h3>
-        <p className="text-muted-foreground">
-          Ask natural language questions and get accurate answers with citations showing exactly where the information came from.
-        </p>
-      </div>
-
-      {/* Feature 3 */}
-      <div className="bg-card rounded-lg p-8 border border-border">
-        <Zap className="w-12 h-12 text-accent mb-4" />
-        <h3 className="text-xl font-semibold text-foreground mb-3">
-          Lightning Fast
-        </h3>
-        <p className="text-muted-foreground">
-          Powered by cutting-edge AI models for instant, accurate responses to your questions.
-        </p>
-      </div>
-    </div>
-  </section>
+    </section>
   )
 }
+
+

@@ -171,6 +171,8 @@ exports.Prisma.ChatScalarFieldEnum = {
 exports.Prisma.DocumentScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  fileUrl: 'fileUrl',
+  status: 'status',
   userId: 'userId',
   chunkCount: 'chunkCount',
   createdAt: 'createdAt'
@@ -190,7 +192,10 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
+exports.Status = exports.$Enums.Status = {
+  COMPLETED: 'COMPLETED',
+  PENDING: 'PENDING'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',

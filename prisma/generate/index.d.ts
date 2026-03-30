@@ -45,6 +45,23 @@ export type Chat = $Result.DefaultSelection<Prisma.$ChatPayload>
 export type Document = $Result.DefaultSelection<Prisma.$DocumentPayload>
 
 /**
+ * Enums
+ */
+export namespace $Enums {
+  export const Status: {
+  COMPLETED: 'COMPLETED',
+  PENDING: 'PENDING'
+};
+
+export type Status = (typeof Status)[keyof typeof Status]
+
+}
+
+export type Status = $Enums.Status
+
+export const Status: typeof $Enums.Status
+
+/**
  * ##  Prisma Client ʲˢ
  *
  * Type-safe database client for TypeScript & Node.js
@@ -6883,6 +6900,8 @@ export namespace Prisma {
   export type DocumentMinAggregateOutputType = {
     id: string | null
     name: string | null
+    fileUrl: string | null
+    status: $Enums.Status | null
     userId: string | null
     chunkCount: number | null
     createdAt: Date | null
@@ -6891,6 +6910,8 @@ export namespace Prisma {
   export type DocumentMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    fileUrl: string | null
+    status: $Enums.Status | null
     userId: string | null
     chunkCount: number | null
     createdAt: Date | null
@@ -6899,6 +6920,8 @@ export namespace Prisma {
   export type DocumentCountAggregateOutputType = {
     id: number
     name: number
+    fileUrl: number
+    status: number
     userId: number
     chunkCount: number
     createdAt: number
@@ -6917,6 +6940,8 @@ export namespace Prisma {
   export type DocumentMinAggregateInputType = {
     id?: true
     name?: true
+    fileUrl?: true
+    status?: true
     userId?: true
     chunkCount?: true
     createdAt?: true
@@ -6925,6 +6950,8 @@ export namespace Prisma {
   export type DocumentMaxAggregateInputType = {
     id?: true
     name?: true
+    fileUrl?: true
+    status?: true
     userId?: true
     chunkCount?: true
     createdAt?: true
@@ -6933,6 +6960,8 @@ export namespace Prisma {
   export type DocumentCountAggregateInputType = {
     id?: true
     name?: true
+    fileUrl?: true
+    status?: true
     userId?: true
     chunkCount?: true
     createdAt?: true
@@ -7028,6 +7057,8 @@ export namespace Prisma {
   export type DocumentGroupByOutputType = {
     id: string
     name: string
+    fileUrl: string
+    status: $Enums.Status
     userId: string
     chunkCount: number
     createdAt: Date
@@ -7055,6 +7086,8 @@ export namespace Prisma {
   export type DocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    fileUrl?: boolean
+    status?: boolean
     userId?: boolean
     chunkCount?: boolean
     createdAt?: boolean
@@ -7066,6 +7099,8 @@ export namespace Prisma {
   export type DocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    fileUrl?: boolean
+    status?: boolean
     userId?: boolean
     chunkCount?: boolean
     createdAt?: boolean
@@ -7075,6 +7110,8 @@ export namespace Prisma {
   export type DocumentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    fileUrl?: boolean
+    status?: boolean
     userId?: boolean
     chunkCount?: boolean
     createdAt?: boolean
@@ -7084,12 +7121,14 @@ export namespace Prisma {
   export type DocumentSelectScalar = {
     id?: boolean
     name?: boolean
+    fileUrl?: boolean
+    status?: boolean
     userId?: boolean
     chunkCount?: boolean
     createdAt?: boolean
   }
 
-  export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "userId" | "chunkCount" | "createdAt", ExtArgs["result"]["document"]>
+  export type DocumentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "fileUrl" | "status" | "userId" | "chunkCount" | "createdAt", ExtArgs["result"]["document"]>
   export type DocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     chats?: boolean | Document$chatsArgs<ExtArgs>
@@ -7111,6 +7150,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      fileUrl: string
+      status: $Enums.Status
       userId: string
       chunkCount: number
       createdAt: Date
@@ -7541,6 +7582,8 @@ export namespace Prisma {
   interface DocumentFieldRefs {
     readonly id: FieldRef<"Document", 'String'>
     readonly name: FieldRef<"Document", 'String'>
+    readonly fileUrl: FieldRef<"Document", 'String'>
+    readonly status: FieldRef<"Document", 'Status'>
     readonly userId: FieldRef<"Document", 'String'>
     readonly chunkCount: FieldRef<"Document", 'Int'>
     readonly createdAt: FieldRef<"Document", 'DateTime'>
@@ -8061,6 +8104,8 @@ export namespace Prisma {
   export const DocumentScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    fileUrl: 'fileUrl',
+    status: 'status',
     userId: 'userId',
     chunkCount: 'chunkCount',
     createdAt: 'createdAt'
@@ -8137,6 +8182,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Status'
+   */
+  export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
+    
+
+
+  /**
+   * Reference to a field of type 'Status[]'
+   */
+  export type ListEnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status[]'>
     
 
 
@@ -8486,6 +8545,8 @@ export namespace Prisma {
     NOT?: DocumentWhereInput | DocumentWhereInput[]
     id?: StringFilter<"Document"> | string
     name?: StringFilter<"Document"> | string
+    fileUrl?: StringFilter<"Document"> | string
+    status?: EnumStatusFilter<"Document"> | $Enums.Status
     userId?: StringFilter<"Document"> | string
     chunkCount?: IntFilter<"Document"> | number
     createdAt?: DateTimeFilter<"Document"> | Date | string
@@ -8496,6 +8557,8 @@ export namespace Prisma {
   export type DocumentOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    fileUrl?: SortOrder
+    status?: SortOrder
     userId?: SortOrder
     chunkCount?: SortOrder
     createdAt?: SortOrder
@@ -8509,6 +8572,8 @@ export namespace Prisma {
     OR?: DocumentWhereInput[]
     NOT?: DocumentWhereInput | DocumentWhereInput[]
     name?: StringFilter<"Document"> | string
+    fileUrl?: StringFilter<"Document"> | string
+    status?: EnumStatusFilter<"Document"> | $Enums.Status
     userId?: StringFilter<"Document"> | string
     chunkCount?: IntFilter<"Document"> | number
     createdAt?: DateTimeFilter<"Document"> | Date | string
@@ -8519,6 +8584,8 @@ export namespace Prisma {
   export type DocumentOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    fileUrl?: SortOrder
+    status?: SortOrder
     userId?: SortOrder
     chunkCount?: SortOrder
     createdAt?: SortOrder
@@ -8535,6 +8602,8 @@ export namespace Prisma {
     NOT?: DocumentScalarWhereWithAggregatesInput | DocumentScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Document"> | string
     name?: StringWithAggregatesFilter<"Document"> | string
+    fileUrl?: StringWithAggregatesFilter<"Document"> | string
+    status?: EnumStatusWithAggregatesFilter<"Document"> | $Enums.Status
     userId?: StringWithAggregatesFilter<"Document"> | string
     chunkCount?: IntWithAggregatesFilter<"Document"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Document"> | Date | string
@@ -8884,6 +8953,8 @@ export namespace Prisma {
   export type DocumentCreateInput = {
     id?: string
     name: string
+    fileUrl: string
+    status?: $Enums.Status
     chunkCount: number
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutDocumentsInput
@@ -8893,6 +8964,8 @@ export namespace Prisma {
   export type DocumentUncheckedCreateInput = {
     id?: string
     name: string
+    fileUrl: string
+    status?: $Enums.Status
     userId: string
     chunkCount: number
     createdAt?: Date | string
@@ -8902,6 +8975,8 @@ export namespace Prisma {
   export type DocumentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDocumentsNestedInput
@@ -8911,6 +8986,8 @@ export namespace Prisma {
   export type DocumentUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     userId?: StringFieldUpdateOperationsInput | string
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -8920,6 +8997,8 @@ export namespace Prisma {
   export type DocumentCreateManyInput = {
     id?: string
     name: string
+    fileUrl: string
+    status?: $Enums.Status
     userId: string
     chunkCount: number
     createdAt?: Date | string
@@ -8928,6 +9007,8 @@ export namespace Prisma {
   export type DocumentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -8935,6 +9016,8 @@ export namespace Prisma {
   export type DocumentUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     userId?: StringFieldUpdateOperationsInput | string
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9297,6 +9380,13 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type EnumStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -9311,6 +9401,8 @@ export namespace Prisma {
   export type DocumentCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    fileUrl?: SortOrder
+    status?: SortOrder
     userId?: SortOrder
     chunkCount?: SortOrder
     createdAt?: SortOrder
@@ -9323,6 +9415,8 @@ export namespace Prisma {
   export type DocumentMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    fileUrl?: SortOrder
+    status?: SortOrder
     userId?: SortOrder
     chunkCount?: SortOrder
     createdAt?: SortOrder
@@ -9331,6 +9425,8 @@ export namespace Prisma {
   export type DocumentMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    fileUrl?: SortOrder
+    status?: SortOrder
     userId?: SortOrder
     chunkCount?: SortOrder
     createdAt?: SortOrder
@@ -9338,6 +9434,16 @@ export namespace Prisma {
 
   export type DocumentSumOrderByAggregateInput = {
     chunkCount?: SortOrder
+  }
+
+  export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -9624,6 +9730,10 @@ export namespace Prisma {
     connect?: ChatWhereUniqueInput | ChatWhereUniqueInput[]
   }
 
+  export type EnumStatusFieldUpdateOperationsInput = {
+    set?: $Enums.Status
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -9829,6 +9939,23 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedEnumStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
+  export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
+  }
+
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -9945,6 +10072,8 @@ export namespace Prisma {
   export type DocumentCreateWithoutUserInput = {
     id?: string
     name: string
+    fileUrl: string
+    status?: $Enums.Status
     chunkCount: number
     createdAt?: Date | string
     chats?: ChatCreateNestedManyWithoutDocumentInput
@@ -9953,6 +10082,8 @@ export namespace Prisma {
   export type DocumentUncheckedCreateWithoutUserInput = {
     id?: string
     name: string
+    fileUrl: string
+    status?: $Enums.Status
     chunkCount: number
     createdAt?: Date | string
     chats?: ChatUncheckedCreateNestedManyWithoutDocumentInput
@@ -10078,6 +10209,8 @@ export namespace Prisma {
     NOT?: DocumentScalarWhereInput | DocumentScalarWhereInput[]
     id?: StringFilter<"Document"> | string
     name?: StringFilter<"Document"> | string
+    fileUrl?: StringFilter<"Document"> | string
+    status?: EnumStatusFilter<"Document"> | $Enums.Status
     userId?: StringFilter<"Document"> | string
     chunkCount?: IntFilter<"Document"> | number
     createdAt?: DateTimeFilter<"Document"> | Date | string
@@ -10253,6 +10386,8 @@ export namespace Prisma {
   export type DocumentCreateWithoutChatsInput = {
     id?: string
     name: string
+    fileUrl: string
+    status?: $Enums.Status
     chunkCount: number
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutDocumentsInput
@@ -10261,6 +10396,8 @@ export namespace Prisma {
   export type DocumentUncheckedCreateWithoutChatsInput = {
     id?: string
     name: string
+    fileUrl: string
+    status?: $Enums.Status
     userId: string
     chunkCount: number
     createdAt?: Date | string
@@ -10322,6 +10459,8 @@ export namespace Prisma {
   export type DocumentUpdateWithoutChatsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutDocumentsNestedInput
@@ -10330,6 +10469,8 @@ export namespace Prisma {
   export type DocumentUncheckedUpdateWithoutChatsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     userId?: StringFieldUpdateOperationsInput | string
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -10476,6 +10617,8 @@ export namespace Prisma {
   export type DocumentCreateManyUserInput = {
     id?: string
     name: string
+    fileUrl: string
+    status?: $Enums.Status
     chunkCount: number
     createdAt?: Date | string
   }
@@ -10567,6 +10710,8 @@ export namespace Prisma {
   export type DocumentUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chats?: ChatUpdateManyWithoutDocumentNestedInput
@@ -10575,6 +10720,8 @@ export namespace Prisma {
   export type DocumentUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chats?: ChatUncheckedUpdateManyWithoutDocumentNestedInput
@@ -10583,6 +10730,8 @@ export namespace Prisma {
   export type DocumentUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     chunkCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
