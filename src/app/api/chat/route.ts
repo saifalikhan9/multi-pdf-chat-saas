@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       return Response.json({ error: "Invalid question" }, { status: 400 });
     }
 
-    const docs = await retrieveChunks(question, userId, docId);
+    
 
     const context = buildContext(docs);
 
