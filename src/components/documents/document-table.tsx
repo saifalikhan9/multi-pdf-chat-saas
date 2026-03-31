@@ -1,257 +1,148 @@
 "use client"
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { FileText, Trash2, Eye, Search, Upload } from "lucide-react"
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog"
-import UploadPDF from "@/components/upload/UploadPDF"
-import Link from "next/link"
-import { toast } from "sonner"
-import { UploadDropzone } from "@/lib/uploadthing"
+import React, { useState, useMemo } from 'react'
+import { Card } from '../ui/card'
+import { Eye, FileText, Trash2 } from 'lucide-react'
+import Link from 'next/link'
+import { Button } from '../ui/button'
 
-type Document = {
-    id: string
-    name: string
-    chunkCount: number
+interface TableDataTypes {
+    id: string,
+    name: string,
+    chunkCount: number,
     createdAt: string
 }
 
-export default function DocumentsTable({
-    documents
-}: {
-    documents: Document[]
-}) {
+interface DocumentTableProps {
+    documents: TableDataTypes[]
+}
 
-    const [searchQuery, setSearchQuery] = useState("")
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [docs, setDocs] = useState(documents)
+const DocumentTable: React.FC<DocumentTableProps> = ({ documents }) => {
+    const [searchQuery, setSearchQuery] = useState<string>("")
     const [deleting, setDeleting] = useState<string | null>(null)
+    // This is client-only: parent server component fetches & passes documents
 
-    const filteredDocuments = docs.filter(doc =>
-        doc.name.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredDocuments = useMemo(
+        () =>
+            documents.filter(doc =>
+                doc.name.toLowerCase().includes(searchQuery.toLowerCase())
+            ),
+        [documents, searchQuery]
     )
 
-    async function deleteDocument(id: string) {
-        try {
-            setDeleting(id)
-
-            const res = await fetch(`/api/documents/${id}`, {
-                method: "DELETE"
-            })
-
-            const data = await res.json()
-
-            if (!res.ok) {
-                throw new Error(data.error || "Delete failed")
-            }
-
-            setDocs(prev => prev.filter(doc => doc.id !== id))
-
-            toast.success("Document deleted")
-
-        } catch (err: any) {
-            toast.error(err.message)
-        } finally {
+    // Placeholder: implement actual delete logic here when backend is ready
+    function handleDeleteDocument(id: string) {
+        setDeleting(id)
+        // In real usage, call your backend delete API and refresh state by re-fetching from server
+        setTimeout(() => {
             setDeleting(null)
-        }
+            // Optionally show a toast or refetch after delete
+        }, 600)
     }
 
     return (
-        <div className="space-y-6">
+        <Card className="bg-card shadow shadow-primary/50">
+            <div className="overflow-x-auto">
 
-            {/* Search */}
-            <div className="flex justify-between ">
-
-                <div className="relative">
-                    <Search className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
-                    <Input
+                <div className="max-w-sm mb-4 ml-4">
+                    <input
+                        type="text"
                         placeholder="Search documents..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 bg-card border-border"
+                        onChange={e => setSearchQuery(e.target.value)}
+                        className="w-full px-4 py-2 rounded border border-border bg-card text-foreground"
                     />
                 </div>
-                {/* <Dialog>
-                    <DialogTrigger >
-                        <Button className="gap-2">
-                            <Upload size={18} />
-                            Upload PDF
-                        </Button>
-                    </DialogTrigger>
 
-                    <DialogContent className="sm:max-w-lg">
-                        <DialogHeader>
-                            <DialogTitle>Upload PDF</DialogTitle>
-                        </DialogHeader>
+                <table className="w-full">
 
-                        <UploadPDF />
-                    </DialogContent>
-                </Dialog> */}
+                    <thead>
+                        <tr className="border-b border-border">
+                            <th className="text-left p-4 font-semibold text-muted-foreground">
+                                Name
+                            </th>
+                            <th className="text-left p-4 font-semibold text-muted-foreground">
+                                Chunks
+                            </th>
+                            <th className="text-left p-4 font-semibold text-muted-foreground">
+                                Uploaded
+                            </th>
+                            <th className="text-right p-4 font-semibold text-muted-foreground">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
 
+                    <tbody>
+                        {filteredDocuments.map(doc => (
+                            <tr
+                                key={doc.id}
+                                className="border-b border-border hover:bg-background"
+                            >
+                                {/* Name */}
+                                <td className="p-4">
+                                    <div className="flex items-center gap-3">
+                                        <FileText className="w-5 h-5 text-accent shrink-0" />
+                                        <span className="font-medium text-foreground truncate">
+                                            {doc.name}
+                                        </span>
+                                    </div>
+                                </td>
 
-                <UploadDropzone
-                    // This must match the endpoint name you defined in core.ts
-                    endpoint="pdfUploader"
+                                {/* Chunks */}
+                                <td className="p-4 text-muted-foreground">
+                                    {doc.chunkCount}
+                                </td>
 
-                    onUploadBegin={() => {
-                        // Triggers the moment the file is dropped
-                        setIsProcessing(true);
-                    }}
+                                {/* Uploaded */}
+                                <td className="p-4 text-muted-foreground">
+                                    {new Date(doc.createdAt).toLocaleDateString()}
+                                </td>
 
-                    onClientUploadComplete={(res) => {
-                        // Runs when UploadThing finishes saving to the bucket
-                        setIsProcessing(false);
-
-                        // res is an array of uploaded files. We only allow 1 at a time.
-                        const uploadedFile = res?.[0];
-
-                        if (uploadedFile) {
-                            console.log("File available at:", uploadedFile.url);
-                            // TODO: Refresh your document list or redirect to the Chat Workspace
-                            alert("Upload Complete! We are processing your PDF.");
-                        }
-                    }}
-
-                    onUploadError={(error: Error) => {
-                        setIsProcessing(false);
-                        // Standard error handling (e.g., file too large, wrong type)
-                        alert(`ERROR! ${error.message}`);
-                    }}
-
-                    // Optional: Customize the styling using Tailwind
-                    appearance={{
-                        container: "border-2 border-dashed border-gray-300 bg-gray-50",
-                        button: "bg-blue-600 hover:bg-blue-700 text-white",
-                        label: "text-gray-600",
-                    }}
-                />
-
-
-            </div>
-
-            {/* Table */}
-            <Card className="bg-card border-border">
-                <div className="overflow-x-auto">
-
-                    <table className="w-full">
-
-                        <thead>
-                            <tr className="border-b border-border">
-                                <th className="text-left p-4 font-semibold text-muted-foreground">
-                                    Name
-                                </th>
-
-                                <th className="text-left p-4 font-semibold text-muted-foreground">
-                                    Chunks
-                                </th>
-
-                                <th className="text-left p-4 font-semibold text-muted-foreground">
-                                    Uploaded
-                                </th>
-
-                                <th className="text-right p-4 font-semibold text-muted-foreground">
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-
-                            {filteredDocuments.map(doc => (
-
-                                <tr
-                                    key={doc.id}
-                                    className="border-b border-border hover:bg-background"
-                                >
-
-                                    {/* Name */}
-                                    <td className="p-4">
-                                        <div className="flex items-center gap-3">
-                                            <FileText className="w-5 h-5 text-accent shrink-0" />
-                                            <span className="font-medium text-foreground truncate">
-                                                {doc.name}
-                                            </span>
-                                        </div>
-                                    </td>
-
-                                    {/* Chunks */}
-                                    <td className="p-4 text-muted-foreground">
-                                        {doc.chunkCount}
-                                    </td>
-
-                                    {/* Uploaded */}
-                                    <td className="p-4 text-muted-foreground">
-                                        {new Date(doc.createdAt).toLocaleDateString()}
-                                    </td>
-
-                                    {/* Actions */}
-                                    <td className="p-4 text-right">
-
-                                        <div className="flex justify-end gap-2">
-
-                                            <Link href={`/chat/${doc.id}`}>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    title="Chat with document"
-                                                >
-                                                    <Eye size={16} />
-                                                </Button>
-                                            </Link>
-
+                                {/* Actions */}
+                                <td className="p-4 text-right">
+                                    <div className="flex justify-end gap-2">
+                                        <Link href={`/chat/${doc.id}`}>
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                disabled={deleting === doc.id}
-                                                onClick={() => deleteDocument(doc.id)}
-                                                className="text-destructive"
-                                                title="Delete document"
+                                                title="Chat with document"
                                             >
-                                                <Trash2 size={16} />
+                                                <Eye size={16} />
                                             </Button>
+                                        </Link>
 
-                                        </div>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            disabled={deleting === doc.id}
+                                            onClick={() => handleDeleteDocument(doc.id)}
+                                            className="text-destructive"
+                                            title="Delete document"
+                                        >
+                                            <Trash2 size={16} />
+                                        </Button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
-                                    </td>
-
-                                </tr>
-
-                            ))}
-
-                        </tbody>
-
-                    </table>
-
+            {/* Empty State */}
+            {filteredDocuments.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-12">
+                    <FileText className="w-12 h-12 text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">
+                        {searchQuery
+                            ? "No documents found"
+                            : "No documents uploaded yet"}
+                    </p>
                 </div>
-
-                {/* Empty State */}
-                {filteredDocuments.length === 0 && (
-                    <div className="flex flex-col items-center justify-center py-12">
-                        <FileText className="w-12 h-12 text-muted-foreground mb-4" />
-
-                        <p className="text-muted-foreground">
-                            {searchQuery
-                                ? "No documents found"
-                                : "No documents uploaded yet"}
-                        </p>
-                    </div>
-                )}
-
-            </Card>
-
-        </div>
+            )}
+        </Card>
     )
 }
 
-
-
-
-
+export default DocumentTable

@@ -16,9 +16,9 @@ export function Sidebar({ className }: SidebarProps) {
   const toggleSidebar = () => setIsOpen(!isOpen)
 
   const navItems = [
-    { icon: MessageSquare, label: 'New Chat', href: '/chat/new' },
+    { icon: MessageSquare, label: 'Uplaod', href: '/upload' },
     { icon: FileText, label: 'Documents', href: '/documents' },
-    { icon: Settings, label: 'Settings', href: '/settings' },
+
   ]
 
   return (

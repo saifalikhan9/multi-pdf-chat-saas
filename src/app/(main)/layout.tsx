@@ -11,7 +11,6 @@ interface AppLayoutProps {
 export default function AppLayout({ children, className }: AppLayoutProps) {
   return (
     <div className="flex min-h-screen bg-background max-w-7xl mx-auto my-2">
-      <Sidebar />
       <main
         className={cn(
           'flex-1 w-full overflow-auto md:ml-0',

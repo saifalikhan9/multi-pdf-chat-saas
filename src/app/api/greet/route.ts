@@ -1,76 +1,75 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/services/auth/auth";
 import { minstral } from "@/services/llms/minstral";
-
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {
     try {
-        const session = await auth();
-        if (!session?.user) throw new Error("Unauthorized");
-        const userId = session.user.id;
-        const lastMessage = await prisma.chat.findFirst({
-            where: { userId },
-            orderBy: { createdAt: "desc" },
-            include: { document: true }
-        });
-
-        if (!lastMessage) {
-            return new Response(
-                "Welcome! Upload your first PDF to start chatting and extracting insights.",
-                {
-                    status: 200,
-                    headers: { "Content-Type": "text/plain; charset=utf-8" }
-                }
-            );
-        }
-        // here we get all the docs from the specific user and then we get get the chunks and build the context and feed that to the llm
-
-        const promptTemplate = PromptTemplate.fromTemplate(`
-            You are the AI assistant for a PDF chat application. The user just logged into their dashboard.
-            
-            Here is the context of their last interaction:
-            - Document they were reading: {docName}
-            - Their last question: "{question}"
-            - Your last answer: "{answer}"
-            
-            Write a short, friendly, one-to-two sentence greeting. Welcome them back, briefly mention what you were last discussing, and ask if they want to continue with that document or explore something new. 
-            Keep it conversational and helpful. Do not use quotes around your greeting.
-          `);
-        const chain = promptTemplate.pipe(minstral).pipe((new StringOutputParser()));
-
-
-        const stream = await chain.stream({
-            docName: lastMessage.document.name,
-            question: lastMessage.question,
-            answer: lastMessage.answer,
-        });
-
-        const encoder = new TextEncoder();
-        const readableStream = new ReadableStream({
-            async start(controller) {
-
-                for await (const chunk of stream) {
-                    controller.enqueue(
-                        encoder.encode(chunk)
-                    );
-                }
-
-                controller.close();
-            },
-        });
-
-        return new Response(readableStream, {
-            headers: {
-                "Content-Type": "text/plain; charset=utf-8",
-                "Cache-Control": "no-cache, no-transform",
-            },
-        });
-
+      const session = await auth();
+      if (!session?.user) throw new Error("Unauthorized");
+  
+      const userId = session.user.id;
+  
+      const messages = await prisma.chat.findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+        include: { document: true }
+      });
+  
+      if (!messages.length) {
+        return new Response(
+          "Welcome! Upload your first PDF to start chatting and extracting insights.",
+          {
+            status: 200,
+            headers: { "Content-Type": "text/plain; charset=utf-8" }
+          }
+        );
+      }
+  
+      const orderedMessages = messages.reverse();
+  
+      const history = orderedMessages.map((msg, i) => {
+        return `
+        Message ${i + 1}:
+        Document: ${msg.document.name}
+        Question: ${msg.question}
+        Answer: ${msg.answer}
+        `;
+      }).join("\n");
+  
+      const promptTemplate = PromptTemplate.fromTemplate(`
+  You are an AI assistant for a PDF chat app.
+  
+  Here is the user's recent activity:
+  {history}
+  
+  Write a short, friendly 1–2 sentence greeting:
+  - Welcome them back
+  - Briefly summarize what they were working on
+  - Ask if they want to continue or try something new
+  
+  Keep it natural and conversational.
+  `);
+  
+      const chain = promptTemplate
+        .pipe(minstral)
+        .pipe(new StringOutputParser());
+  
+      // ✅ NO STREAM
+      const result = await chain.invoke({ history });
+  
+      return new Response(result, {
+        status: 200,
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+        },
+      });
+  
     } catch (error) {
-        console.error("Chat API error:", error);
-        return Response.json({ error: "Chat failed" }, { status: 500 });
+      console.error("Chat API error:", error);
+      return Response.json({ error: "Chat failed" }, { status: 500 });
     }
-}
+  };
