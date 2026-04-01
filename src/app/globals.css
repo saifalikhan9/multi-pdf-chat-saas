@@ -1,8 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 @import "shadcn/tailwind.css";
 
-@import "tailwindcss";
 
 @import "uploadthing/tw/v4";
 @source "@/../node_modules/uploadthing/dist"; /** <-- depends on your project structure */

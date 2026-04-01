@@ -6,27 +6,44 @@ import { Bot } from 'lucide-react'
 import DocumentTable from "@/components/documents/document-table"
 import prisma from '@/lib/prisma'
 import { auth } from '@/services/auth/auth'
+import { CTAButtons } from './CTA-Buttons'
+import { cookies } from 'next/headers';
+import ReactMarkdown from "react-markdown"
+
+
 
 
 export default async function DashboardPage() {
     const session = await auth();
-    const userId = session?.user.id
-    const data = await prisma.document.findMany({
-        where: {
-            userId
-        },
+    const userId = session?.user.id;
+    
+    const cookieStore = await cookies();
+    
+    const [data, greetRes] = await Promise.all([
+      prisma.document.findMany({
+        where: { userId },
         select: {
-            id: true,
-            name: true,
-            chunkCount: true,
-            createdAt: true,
+          id: true,
+          name: true,
+          chunkCount: true,
+          createdAt: true,
         },
-    })
-
+      }),
+      fetch("http://localhost:3000/api/greet", {
+        headers: {
+          cookie: cookieStore.toString(),
+        },
+      }),
+    ]);
+    
     const tableData = data.map((doc) => ({
-        ...doc,
-        createdAt: doc.createdAt.toISOString(),
-    }))
+      ...doc,
+      createdAt: doc.createdAt.toISOString(),
+    }));
+    
+    const greetData = await greetRes.text();
+
+
 
     return (
         <div className='space-y-8 '>
@@ -39,19 +56,17 @@ export default async function DashboardPage() {
                         iDoc-AI
                     </span>
                 </div>
-                <div className='inline-flex  items-center gap-2'>
-                    <Button variant={"outline"}>upload</Button>
-                    <Button variant={"destructive"}>logout</Button>
-                </div>
+                <CTAButtons />
             </nav>
             {/* ai section  */}
             <div className=' min-h-90 bg-primary/75 rounded-2xl max-w-5xl mx-auto mb-10'>
                 <div className='flex max-w-4xl mx-auto flex-col justify-center items-center'>
 
                     <Bot size={100} />
-                    <h3 className=' py-10  text-xl  text-shadow-2xs '>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus provident nisi repellendus neque nemo suscipit quia quas ratione dolores autem? Perferendis adipisci atque non eos, totam sint quidem odio dolores.
-                    </h3>
+
+                    <article className="prose prose-invert prose-xl ">
+                        <ReactMarkdown >{greetData}</ReactMarkdown>
+                    </article>
                 </div>
             </div>
             {/* ---------------- */}
